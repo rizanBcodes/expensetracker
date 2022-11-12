@@ -8,8 +8,7 @@ dotenv.config();
 
 const port = process.env.PORT || 4000;
 const app = express();
-
-await mongoose.connect(process.env.DB_CONNECTION_STRING,
+mongoose.connect(process.env.DB_CONNECTION_STRING,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
