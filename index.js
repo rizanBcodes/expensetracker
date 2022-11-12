@@ -18,6 +18,12 @@ mongoose.connect(process.env.DB_CONNECTION_STRING,
 app.use(express.json());
 app.use('/api/transactions/', transactionRouter)
 
+app.get(
+    '*',
+    () => {
+        console.log(`caught by unmatched routes`)
+    }
+)
 
 app.listen(port,
     () => {
