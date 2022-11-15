@@ -1,15 +1,14 @@
 import Transaction from "../models/Transaction.js";
 import { requireAuth } from "../middleware/authMiddleware.js";
 
-const addExpenseController =     (req, res) => {
-    const transaction = new Transaction({
+const addExpenseController = async (req, res) => {
+    const transaction = await Transaction.create({
         "date": new Date(),
         "amount": req.body.amount,
         "detail": req.body.detail,
         "category": "expense",
         "user": req.body.userId
     });
-    transaction.save();
 
     res.send('expense added');
 };
