@@ -20,8 +20,17 @@ mongoose.connect(process.env.DB_CONNECTION_STRING,
 // MIDDLEWARE
 app.use(express.json());
 app.use(cookieParser());
-app.use('/api/transactions/', transactionRouter)
+app.use('/api/transactions/', requireAuth, transactionRouter)
 app.use('/api/auth/', authRouter)
+
+// app.get(
+//     '/testauth',
+//     requireAuth,
+//     (req, res) => {
+//         console.log(req.body.userId);
+//         res.send('secret');
+//     }
+// )
 
 app.get('/protected', requireAuth, (req, res) => { res.send('inside protected route'); })
 
