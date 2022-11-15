@@ -5,7 +5,11 @@ const transactionSchema = new mongoose.Schema(
         date: Date,
         detail: String,
         amount: Number,
-        category: String
+        category: String,
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
     }
 )
 
