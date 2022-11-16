@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import authRouter from './routes/authRoutes.js'
 import requireAuth from "./middleware/requireAuth.js";
 import cookieParser from 'cookie-parser'
+import Transaction from "./models/Transaction.js";
 dotenv.config();
 
 const port = process.env.PORT || 4000;
@@ -26,8 +27,19 @@ app.use('/api/auth/', authRouter)
 app.get(
     '/testauth',
     requireAuth,
-    (req, res) => {
-        console.log(req.body.userId);
+    async (req, res) => {
+
+        const startDate = req.query.startDate;
+        const endDate = req.query.endDate;
+
+        if (startDate == undefined || endDate == undefined) {
+            const filteredIfNoQuery = await Transaction.find({});
+            return res.send(filteredIfNoQuery);
+        }
+
+        console.log(startDate, endDate);
+        const filtered = await Transaction.find({ date: { $gt: new Date(startDate), $lt: new Date(endDate) } });
+        console.log(filtered);
         res.send('secret');
     }
 )
