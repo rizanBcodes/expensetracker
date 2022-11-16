@@ -1,5 +1,4 @@
 import Transaction from "../models/Transaction.js";
-import { requireAuth } from "../middleware/authMiddleware.js";
 
 const addEarningController = async (req, res) => {
     //  console.log(req.body.userId);

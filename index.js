@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import transactionRouter from "./routes/transactionRouter.js";
 import dotenv from 'dotenv';
 import authRouter from './routes/authRoutes.js'
-import { requireAuth, checkUser } from "./middleware/authMiddleware.js";
+import requireAuth from "./middleware/requireAuth.js";
 import cookieParser from 'cookie-parser'
 dotenv.config();
 
@@ -23,21 +23,21 @@ app.use(cookieParser());
 app.use('/api/transactions/', requireAuth, transactionRouter)
 app.use('/api/auth/', authRouter)
 
-// app.get(
-//     '/testauth',
-//     requireAuth,
-//     (req, res) => {
-//         console.log(req.body.userId);
-//         res.send('secret');
-//     }
-// )
-
-app.get('/protected', requireAuth, (req, res) => { res.send('inside protected route'); })
+app.get(
+    '/testauth',
+    requireAuth,
+    (req, res) => {
+        console.log(req.body.userId);
+        res.send('secret');
+    }
+)
 
 app.get(
     '*',
     () => {
-        console.log(`caught by unmatched routes`)
+        res.send({
+            "message": "requested endpoint not found"
+        })
     }
 )
 
