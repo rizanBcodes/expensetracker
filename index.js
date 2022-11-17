@@ -3,14 +3,20 @@ import express from "express";
 import mongoose from "mongoose";
 import transactionRouter from "./routes/transactionRouter.js";
 import dotenv from 'dotenv';
-import authRouter from './routes/authRoutes.js'
+import authRouter from './routes/authRoutes.js';
+import userRouter from './routes/userRoutes.js';
 import requireAuth from "./middleware/requireAuth.js";
 import cookieParser from 'cookie-parser'
 import Transaction from "./models/Transaction.js";
-dotenv.config();
+import path from 'path';
+import {fileURLToPath} from 'url';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const port = process.env.PORT || 4000;
 const app = express();
+
+dotenv.config();
 
 mongoose.connect(process.env.DB_CONNECTION_STRING,
     {
@@ -18,11 +24,28 @@ mongoose.connect(process.env.DB_CONNECTION_STRING,
         useUnifiedTopology: true
     });
 
+    import multer from 'multer';
+
+    var fileStorageEngine = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, './images')
+        },
+        filename: function (req, file, cb) {
+            cb(null, Date.now() + '--' + file.originalname)
+        }
+    })
+    var upload = multer({ storage: fileStorageEngine });
+    
+
 // MIDDLEWARE
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static(__dirname + '/uploads'));
+app.use('/uploads', express.static('uploads'));
+
 app.use('/api/transactions/', requireAuth, transactionRouter)
 app.use('/api/auth/', authRouter)
+app.use('/api/user/', requireAuth, upload.single('image'), userRouter)
 
 app.get(
     '/testauth',
