@@ -8,8 +8,9 @@ import userRouter from './routes/userRoutes.js';
 import requireAuth from "./middleware/requireAuth.js";
 import cookieParser from 'cookie-parser'
 import Transaction from "./models/Transaction.js";
+import multer from 'multer';
 import path from 'path';
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,18 +25,16 @@ mongoose.connect(process.env.DB_CONNECTION_STRING,
         useUnifiedTopology: true
     });
 
-    import multer from 'multer';
+var fileStorageEngine = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './images')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '--' + file.originalname)
+    }
+})
+var upload = multer({ storage: fileStorageEngine });
 
-    var fileStorageEngine = multer.diskStorage({
-        destination: function (req, file, cb) {
-            cb(null, './images')
-        },
-        filename: function (req, file, cb) {
-            cb(null, Date.now() + '--' + file.originalname)
-        }
-    })
-    var upload = multer({ storage: fileStorageEngine });
-    
 
 // MIDDLEWARE
 app.use(express.json());
