@@ -12,7 +12,7 @@ const uploadProfileController = (req, res) => {
             if (err) {
                 console.log(err)
             }
-            console.log(doc);
+            // console.log(doc);
 
         });
 
