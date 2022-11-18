@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import transactionRouter from "./routes/transactionRouter.js";
 import dotenv from 'dotenv';
 import authRouter from './routes/authRoutes.js';
-import userRouter from './routes/userRoutes.js';
+import profileRouter from './routes/profileRoutes.js';
 import requireAuth from "./middleware/requireAuth.js";
 import cookieParser from 'cookie-parser'
 import Transaction from "./models/Transaction.js";
@@ -57,7 +57,7 @@ app.use('/uploads', express.static('uploads'));
 
 app.use('/api/transactions/', requireAuth, transactionRouter)
 app.use('/api/auth/', authRouter)
-app.use('/api/user/', requireAuth, upload.single('image'), userRouter)
+app.use('/api/user/', requireAuth, upload.single('image'), profileRouter)
 
 app.get(
     '/testauth',
