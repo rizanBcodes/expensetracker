@@ -11,7 +11,8 @@ const requireAuth = (req, res, next) => {
         res.send('internal error occured');
       } else {
         req.body.userId = decodedToken.id;
-        // console.log(req.body.userId);
+        res.locals.userId = decodedToken.id;
+        
         next();
       }
     });

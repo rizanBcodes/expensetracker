@@ -19,11 +19,24 @@ const app = express();
 
 dotenv.config();
 
-mongoose.connect(process.env.DB_CONNECTION_STRING,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    });
+const connectToDatabase = async () => {
+    await mongoose.connect(process.env.DB_CONNECTION_STRING,
+        {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        })
+        .then(
+            () => {
+                console.log('connection to database')
+            }
+        )
+        .catch(
+            err => {
+                console.error(err);
+            }
+        )
+}
+connectToDatabase();
 
 var fileStorageEngine = multer.diskStorage({
     destination: function (req, file, cb) {
