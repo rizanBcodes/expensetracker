@@ -1,7 +1,6 @@
 // IMPORTS 
 import express from "express";
 import mongoose from "mongoose";
-import transactionRouter from "./routes/transactionRouter.js";
 import dotenv from 'dotenv';
 import authRouter from './routes/authRoutes.js';
 import profileRouter from './routes/profileRoutes.js';
@@ -56,11 +55,8 @@ app.use(cookieParser());
 app.use(express.static(__dirname + '/uploads'));
 app.use('/uploads', express.static('uploads'));
 
-app.use('/api/transactions/', requireAuth, transactionRouter)
 app.use('/api/auth/', authRouter)
 app.use('/api/user/', requireAuth, upload.single('image'), profileRouter)
-
-//use this route for refactoring current transaction routes
 app.use('/api/finance/', requireAuth, finRouter);
 
 app.get(
