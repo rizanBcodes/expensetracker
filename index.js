@@ -1,7 +1,6 @@
 // IMPORTS 
 import express from "express";
 import mongoose from "mongoose";
-import transactionRouter from "./routes/transactionRouter.js";
 import dotenv from 'dotenv';
 import authRouter from './routes/authRoutes.js';
 import profileRouter from './routes/profileRoutes.js';
@@ -11,6 +10,7 @@ import Transaction from "./models/Transaction.js";
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import finRouter from "./routes/finRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,9 +55,9 @@ app.use(cookieParser());
 app.use(express.static(__dirname + '/uploads'));
 app.use('/uploads', express.static('uploads'));
 
-app.use('/api/transactions/', requireAuth, transactionRouter)
 app.use('/api/auth/', authRouter)
 app.use('/api/user/', requireAuth, upload.single('image'), profileRouter)
+app.use('/api/finance/', requireAuth, finRouter);
 
 app.get(
     '/testauth',
@@ -81,7 +81,7 @@ app.get(
 
 app.get(
     '*',
-    () => {
+    (req, res) => {
         res.send({
             "message": "requested endpoint not found"
         })
