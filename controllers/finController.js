@@ -15,7 +15,6 @@ const allFinController = (req, res) => {
 }
 
 const getFinController = (req, res) => {
-
     //need to redefine category for some reason
     const category = req.params.category;
 
@@ -46,13 +45,40 @@ const addFinController = async (req, res) => {
 };
 
 const putFinController = async (req, res) => {
+
+    const transId = req.params.transId;
+
     //update transaction
-    return res.send(`transaction update in db for ${req.params.activity}`);
+    try {
+        
+    const transaction = await Transaction.findByIdAndUpdate(
+        {
+            _id: transId
+        },
+        {
+            "date": new Date(),
+            "amount": req.body.amount,
+            "detail": req.body.detail
+        });
+
+    } catch (error) {
+        console.error(error);
+    }
+    return res.send(`transaction update in db for ${transId} transaction`);
 };
 
-const delFinController = (req, res) => {
+const delFinController = async (req, res) => {
+    const transId = req.params.transId;
+
     //delete transaction by id provided
-    return res.send(`transaction deleted from db for ${req.params.activity}`);
+
+    const transaction = Transaction.findOneAndDelete(
+        {
+            _id: transId
+        }
+    )
+    
+    return res.send(`transaction deleted from db for ${transId}`);
 };
 
 export { allFinController, getFinController, addFinController, putFinController, delFinController };

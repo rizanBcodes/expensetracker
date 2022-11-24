@@ -6,7 +6,7 @@ const finRouter = express.Router();
 finRouter.get('/', allFinController);
 finRouter.get('/:category', requireValidCategory, getFinController);
 finRouter.post('/:category', requireValidCategory, addFinController);
-finRouter.put('/:category', requireValidCategory, putFinController);
-finRouter.delete('/:category', requireValidCategory, delFinController);
+finRouter.put('/:transId', putFinController);
+finRouter.delete('/:transId', delFinController);
 
 export default finRouter;
